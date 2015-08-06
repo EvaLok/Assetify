@@ -10,8 +10,7 @@ use
 	Assetic\Factory\AssetFactory,
 	Assetic\Factory\Worker\CacheBustingWorker,
 	Assetic\FilterManager,
-	Assetic\Filter\JSMinFilter,
-	Assetic\Filter\CssMinFilter,
+	Assetic\Filter\FilterInterface,
 	Assetic\AssetWriter
 ;
 
@@ -20,6 +19,7 @@ class Minifier {
 		$files = []
 		, $asset
 		, $type
+		, $filter
 		, $minify
 	;
 
@@ -32,6 +32,7 @@ class Minifier {
 	{
 		$this->asset = new SplFileInfo($params['asset']);
 		$this->files = $params['files'];
+		$this->setFilter($params['filter']);
 		$this->minify = (
 			isset($params['minify']) && ! $params['minify']
 				?
@@ -49,12 +50,10 @@ class Minifier {
 				throw new Exception("unknown type [$type]");
 		}
 
-
-
 		return $this;
 	}
 
-	public function __toString()
+	public function output()
 	{
 		if( ! $this->minify ){
 			return $this->getVerbose();
@@ -72,7 +71,7 @@ class Minifier {
 				foreach( $this->files as $file ) {
 					$r .= (
 						'<script type="text/javascript" src="'
-						. $file . '"></script>'
+							. $file . '"></script>'
 					);
 				}
 				break;
@@ -101,20 +100,10 @@ class Minifier {
 
 		$factory = new AssetFactory($this->asset->getPath());
 		$factory->addWorker(new CacheBustingWorker());
+		$factory->setDefaultOutput('*');
 
 		$fm = new FilterManager();
-
-		switch( $this->type ){
-			case 'js':
-				$factory->setDefaultOutput('*');
-				$fm->set('min', new JSMinFilter());
-				break;
-
-			case 'css':
-				$factory->setDefaultOutput('*');
-				$fm->set('min', new CssMinFilter());
-				break;
-		}
+		$fm->set('min', $this->filter);
 		$factory->setFilterManager($fm);
 
 		$asset = $factory->createAsset(
@@ -152,5 +141,11 @@ class Minifier {
 		}
 
 		return $r;
+	}
+
+	public function setFilter( FilterInterface $filter ){
+		$this->filter = $filter;
+
+		return $this;
 	}
 }
