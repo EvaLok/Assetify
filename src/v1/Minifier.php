@@ -75,7 +75,7 @@ class Minifier {
 				foreach( $this->files as $file ){
 					$r .= (
 						'<script type="text/javascript" src="'
-							. $file . '"></script>'
+							. $file['web'] . '"></script>'
 					);
 				}
 				break;
@@ -83,7 +83,7 @@ class Minifier {
 			case 'css':
 				$r .= '<style type="text/css">' . "\n";
 				foreach( $this->files as $file ){
-					$r .= '@import url("' . $file . '");' . "\n";
+					$r .= '@import url("' . $file['web'] . '");' . "\n";
 				}
 				$r .= '</style>';
 				break;
@@ -111,7 +111,15 @@ class Minifier {
 		$factory->setFilterManager($fm);
 
 		$asset = $factory->createAsset(
-			$this->files,
+			call_user_func(function($files){
+				$r = [];
+
+				foreach($files as $file){
+					$r[] = $file['fs'];
+				}
+
+				return $r;
+			}, $this->files),
 			['min'],
 			['name' => $this->asset->getBasename()]
 		);

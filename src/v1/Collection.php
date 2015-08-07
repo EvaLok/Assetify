@@ -22,16 +22,19 @@ class Collection {
 		// singleton
 	}
 
-	static public function addAsset( $path, $group = null )
+	static public function addAsset( $path_web, $path_fs, $group = null )
 	{
-		$fi = new SplFileInfo($path);
+		$fi = new SplFileInfo($path_fs);
 
 		// if group not set, use extension as group
 		if( ! isset($group) ){
 			$group = strtolower($fi->getExtension());
 		}
 
-		self::$groups[$group][] = $path;
+		self::$groups[$group][] = [
+			'web'=> $path_web,
+			'fs' => $path_fs
+		];
 	}
 
 	static public function addFilter( $type, FilterInterface $filter )

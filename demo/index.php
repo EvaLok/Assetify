@@ -31,7 +31,7 @@ $assets = [
 ];
 
 foreach( $assets as $asset ){
-	Collection::addAsset(__DIR__ . '/' . $asset);
+	Collection::addAsset($asset, __DIR__ . '/' . $asset);
 }
 
 ?>
@@ -49,6 +49,8 @@ foreach( $assets as $asset ){
 				__DIR__ . '/assets/minified-css',
 				'/assets/',
 				'css'
+				// add false param for verbose (non-minified, non-consolidated)
+//				, false
 			);
 
 			// output js asset
@@ -57,6 +59,8 @@ foreach( $assets as $asset ){
 				__DIR__ . '/assets/minified-js',
 				'/assets/',
 				'js'
+				// add false param for verbose (non-minified, non-consolidated)
+//				, false
 			);
 		?>
 	</head>
