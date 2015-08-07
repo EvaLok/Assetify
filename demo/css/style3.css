@@ -1,5 +1,6 @@
 body > div > span {
-    text-align: right;
+    display: inline-block;
+    float: right;
 
     font-weight: bold;
 }

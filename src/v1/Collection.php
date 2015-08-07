@@ -51,6 +51,7 @@ class Collection {
 	static public function getGroupAsset(
 		$group,
 		$asset,
+		$assetWebPath,
 		$type = null,
 		$minify = true
 	){
@@ -61,6 +62,7 @@ class Collection {
 		return (
 			new Minifier([
 				'asset' => $asset,
+				'asset_web_path' => $assetWebPath,
 				'files' => self::getGroup($group),
 				'type' => $type ?: $group,
 				'filter' => self::$filters[$type],

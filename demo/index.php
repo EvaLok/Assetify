@@ -38,6 +38,7 @@ foreach( $css as $asset ){
 			echo Collection::getGroupAsset(
 				'css',
 				__DIR__ . '/assets/minified.css',
+				'/assets/',
 				'css'
 			);
 		?>

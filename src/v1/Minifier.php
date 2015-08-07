@@ -18,6 +18,7 @@ class Minifier {
 	private
 		$files = []
 		, $asset
+		, $assetWebPath
 		, $type
 		, $filter
 		, $minify
@@ -32,7 +33,10 @@ class Minifier {
 	{
 		$this->asset = new SplFileInfo($params['asset']);
 		$this->files = $params['files'];
-		$this->setFilter($params['filter']);
+		$this
+			->setFilter($params['filter'])
+			->setAssetWebPath($params['asset_web_path'])
+		;
 		$this->minify = (
 			isset($params['minify']) && ! $params['minify']
 				?
@@ -68,7 +72,7 @@ class Minifier {
 
 		switch( $this->type ) {
 			case 'js':
-				foreach( $this->files as $file ) {
+				foreach( $this->files as $file ){
 					$r .= (
 						'<script type="text/javascript" src="'
 							. $file . '"></script>'
@@ -78,7 +82,7 @@ class Minifier {
 
 			case 'css':
 				$r .= '<style type="text/css">' . "\n";
-				foreach( $this->files as $file ) {
+				foreach( $this->files as $file ){
 					$r .= '@import url("' . $file . '");' . "\n";
 				}
 				$r .= '</style>';
@@ -125,10 +129,11 @@ class Minifier {
 			// to append a timestamp instead of a hash
 		}
 
-		switch( $this->type ) {
+		switch( $this->type ){
 			case 'js':
 				$r .= (
 					'<script type="text/javascript" src="'
+						. $this->assetWebPath
 						. $asset->getTargetPath() . '"></script>'
 				);
 				break;
@@ -136,6 +141,7 @@ class Minifier {
 			case 'css':
 				$r .= (
 					'<link rel="stylesheet" type="text/css" href="'
+						. $this->assetWebPath
 						. $asset->getTargetPath() . '" />'
 				);
 		}
@@ -143,8 +149,22 @@ class Minifier {
 		return $r;
 	}
 
-	public function setFilter( FilterInterface $filter ){
+	public function setFilter( FilterInterface $filter )
+	{
 		$this->filter = $filter;
+
+		return $this;
+	}
+
+	public function setAssetWebPath( $path )
+	{
+		$path = trim($path, '/');
+		$this->assetWebPath = str_pad(
+			$path,
+			strlen($path) + 1,
+			'/',
+			STR_PAD_RIGHT
+		);
 
 		return $this;
 	}
