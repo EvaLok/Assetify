@@ -7,21 +7,30 @@ use
 	Assetify\v1\Minifier,
 	Assetify\v1\Collection,
 
-	Assetic\Filter\UglifyCssFilter
+	Assetic\Filter\UglifyCssFilter,
+	Assetic\Filter\UglifyJs2Filter
 ;
 
 // set filter
 Collection::addFilter('css', new UglifyCssFilter(
-	'/usr/local/lib/node_modules/uglifycss/uglifycss'
+	'/usr/local/bin/uglifycss'
+));
+Collection::addFilter('js', new UglifyJs2Filter(
+	'/usr/local/bin/uglifyjs'
 ));
 
-$css = [
+$assets = [
+	// css
 	'css/style1.css',
 	'css/style2.css',
 	'css/style3.css',
+
+	// js
+	'bower_components/jquery/dist/jquery.js',
+	'js/demo.js',
 ];
 
-foreach( $css as $asset ){
+foreach( $assets as $asset ){
 	Collection::addAsset(__DIR__ . '/' . $asset);
 }
 
@@ -37,9 +46,17 @@ foreach( $css as $asset ){
 			// output css asset
 			echo Collection::getGroupAsset(
 				'css',
-				__DIR__ . '/assets/minified.css',
+				__DIR__ . '/assets/minified-css',
 				'/assets/',
 				'css'
+			);
+
+			// output js asset
+			echo Collection::getGroupAsset(
+				'js',
+				__DIR__ . '/assets/minified-js',
+				'/assets/',
+				'js'
 			);
 		?>
 	</head>
