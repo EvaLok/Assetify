@@ -1,7 +1,7 @@
 {
 	"name": "evalok/php-assetify",
 	"description" : "extremely simple to use wrapper for basic Assetic usage",
-	"keywords": ["assetic", "asset management", "simple"],
+	"keywords": ["assetic", "asset management", "cPanel", "https", "mod_spdy"],
 	"license": "MIT",
 	"author": {
 		"name": "Eva Lok",
