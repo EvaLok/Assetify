@@ -1,0 +1,7 @@
+body > div {
+    width: 350px;
+    height: 100px;
+
+    padding: 10px;
+    border: 1px solid black;
+}
