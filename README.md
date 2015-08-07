@@ -14,6 +14,9 @@ provides an easy solution for asset consolidation / minification
 ## demo dependencies
 - (from component root) `cd demo && bower install`
 
+# example usage
+https://github.com/EvaLok/php-assetify/blob/master/demo/index.php
+
 # TODO
 - @todo: tests
 - @todo: garbage collection
