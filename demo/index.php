@@ -11,11 +11,14 @@ use
 	Assetic\Filter\UglifyJs2Filter
 ;
 
+// get instance of asset collection
+$ac = Collection::getInstance();
+
 // set filter
-Collection::addFilter('css', new UglifyCssFilter(
+$ac->addFilter('css', new UglifyCssFilter(
 	'/usr/local/bin/uglifycss'
 ));
-Collection::addFilter('js', new UglifyJs2Filter(
+$ac->addFilter('js', new UglifyJs2Filter(
 	'/usr/local/bin/uglifyjs'
 ));
 
@@ -31,7 +34,7 @@ $assets = [
 ];
 
 foreach( $assets as $asset ){
-	Collection::addAsset($asset, __DIR__ . '/' . $asset);
+	$ac->addAsset($asset, __DIR__ . '/' . $asset);
 }
 
 ?>
@@ -44,7 +47,7 @@ foreach( $assets as $asset ){
 
 		<?php
 			// output css asset
-			echo Collection::getGroupAsset(
+			echo $ac->getGroupAsset(
 				'css',
 				__DIR__ . '/assets/minified-css',
 				'/assets/',
@@ -54,7 +57,7 @@ foreach( $assets as $asset ){
 			);
 
 			// output js asset
-			echo Collection::getGroupAsset(
+			echo $ac->getGroupAsset(
 				'js',
 				__DIR__ . '/assets/minified-js',
 				'/assets/',
