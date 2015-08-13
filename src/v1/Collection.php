@@ -86,7 +86,13 @@ class Collection {
 	 */
 	static public function getInstance()
 	{
-		return ! is_null(static::$instance) ? static::$instance : new static;
+		return static::$instance = (
+			! is_null(static::$instance)
+				?
+					static::$instance
+				:
+					new static
+		);
 	}
 
 	static public function destroyInstance()
