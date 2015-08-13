@@ -12,7 +12,9 @@ use
 ;
 
 class Collection {
-	static private
+	private static $instance;
+
+	private
 		$groups = []
 		, $filters = []
 	;
@@ -22,7 +24,7 @@ class Collection {
 		// singleton
 	}
 
-	static public function addAsset( $path_web, $path_fs, $group = null )
+	public function addAsset( $path_web, $path_fs, $group = null )
 	{
 		$fi = new SplFileInfo($path_fs);
 
@@ -31,39 +33,39 @@ class Collection {
 			$group = strtolower($fi->getExtension());
 		}
 
-		self::$groups[$group][] = [
+		$this->groups[$group][] = [
 			'web'=> $path_web,
 			'fs' => $path_fs
 		];
 	}
 
-	static public function addFilter( $type, FilterInterface $filter )
+	public function addFilter( $type, FilterInterface $filter )
 	{
-		self::$filters[$type] = $filter;
+		$this->filters[$type] = $filter;
 	}
 
-	static public function getFilter($type)
+	public function getFilter($type)
 	{
-		return self::$filters[$type];
+		return $this->filters[$type];
 	}
 
-	static public function getGroup( $group )
+	public function getGroup( $group )
 	{
-		if( ! isset(self::$groups[$group]) ){
+		if( ! isset($this->groups[$group]) ){
 			throw new Exception("unknown group [$group]");
 		}
 
-		return self::$groups[$group];
+		return $this->groups[$group];
 	}
 
-	static public function getGroupAsset(
+	public function getGroupAsset(
 		$group,
 		$asset,
 		$assetWebPath,
 		$type = null,
 		$minify = true
 	){
-		if( ! isset(self::$filters[$type]) ){
+		if( ! isset($this->filters[$type]) ){
 			throw new Exception("no filter set for type [$type]");
 		}
 
@@ -82,14 +84,13 @@ class Collection {
 	/**
 	 * for testing only
 	 */
-	static public function getTestableInstance()
+	static public function getInstance()
 	{
-		return new static;
+		return ! is_null(static::$instance) ? static::$instance : new static;
 	}
 
-	static public function clearTestableInstance()
+	static public function destroyInstance()
 	{
-		static::$groups = [];
-		static::$filters = [];
+		static::$instance = null;
 	}
 }
