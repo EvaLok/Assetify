@@ -3,7 +3,7 @@ extremely simple to use wrapper for basic Assetic usage
 
 provides an easy solution for asset consolidation / minification
 
-if possible, i recommend using mod_pagespeed instead, but if you are for example running on a cPanel host using https, this might be a good minification solution for you.
+if possible, i recommend using `mod_pagespeed` instead, but if you are for example running on a cPanel host using https, this might be a good minification solution for you.
 
 # install
 ## component
