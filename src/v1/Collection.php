@@ -19,11 +19,6 @@ class Collection {
 		, $filters = []
 	;
 
-	private function __construct()
-	{
-		// singleton
-	}
-
 	public function addAsset( $path_web, $path_fs, $group = null )
 	{
 		$fi = new SplFileInfo($path_fs);
@@ -81,16 +76,14 @@ class Collection {
 		)->output();
 	}
 
-	/**
-	 * for testing only
-	 */
 	static public function getInstance()
 	{
-		return ! is_null(static::$instance) ? static::$instance : new static;
-	}
-
-	static public function destroyInstance()
-	{
-		static::$instance = null;
+		return static::$instance = (
+			! is_null(static::$instance)
+				?
+					static::$instance
+				:
+					new static
+		);
 	}
 }
