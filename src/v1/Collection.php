@@ -19,11 +19,6 @@ class Collection {
 		, $filters = []
 	;
 
-	private function __construct()
-	{
-		// singleton
-	}
-
 	public function addAsset( $path_web, $path_fs, $group = null )
 	{
 		$fi = new SplFileInfo($path_fs);
@@ -81,9 +76,6 @@ class Collection {
 		)->output();
 	}
 
-	/**
-	 * for testing only
-	 */
 	static public function getInstance()
 	{
 		return static::$instance = (
@@ -93,10 +85,5 @@ class Collection {
 				:
 					new static
 		);
-	}
-
-	static public function destroyInstance()
-	{
-		static::$instance = null;
 	}
 }
