@@ -10,7 +10,7 @@ if possible, i recommend using `mod_pagespeed` instead, but if you are for examp
 `composer require evalok/php-assetify`
 
 ## filter dependencies
-install Assetic filter dependencies are may be necesasry; if you're unsure of how to do this, you can simply use the demo filters listed below
+install Assetic filter dependencies are may be necessary; if you're unsure of how to do this, you can simply use the demo filters listed below
 
 ## demo filters
 - `sudo npm install -g uglifycss`
