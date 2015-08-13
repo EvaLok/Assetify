@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/EvaLok/php-assetify.svg?branch=master)](https://travis-ci.org/EvaLok/php-assetify)
+
 # Assetify
 extremely simple to use wrapper for basic Assetic usage
 
