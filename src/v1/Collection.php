@@ -42,6 +42,11 @@ class Collection {
 		self::$filters[$type] = $filter;
 	}
 
+	static public function getFilter($type)
+	{
+		return self::$filters[$type];
+	}
+
 	static public function getGroup( $group )
 	{
 		if( ! isset(self::$groups[$group]) ){
@@ -68,9 +73,23 @@ class Collection {
 				'asset_web_path' => $assetWebPath,
 				'files' => self::getGroup($group),
 				'type' => $type ?: $group,
-				'filter' => self::$filters[$type],
+				'filter' => self::getFilter($type),
 				'minify' => $minify
 			])
 		)->output();
+	}
+
+	/**
+	 * for testing only
+	 */
+	static public function getTestableInstance()
+	{
+		return new static;
+	}
+
+	static public function clearTestableInstance()
+	{
+		static::$groups = [];
+		static::$filters = [];
 	}
 }
