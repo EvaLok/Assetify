@@ -11,6 +11,9 @@ if possible, i recommend using `mod_pagespeed` instead, but if you are for examp
 ## component
 `composer require evalok/php-assetify`
 
+## development
+`composer update`
+
 ## filter dependencies
 install Assetic filter dependencies are may be necessary; if you're unsure of how to do this, you can simply use the demo filters listed below
 
