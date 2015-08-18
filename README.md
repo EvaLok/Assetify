@@ -19,12 +19,15 @@ install Assetic filter dependencies are may be necessary; if you're unsure of ho
 - `sudo npm install -g uglify-js`
 
 ## demo dependencies
-- (from component root) `cd demo && bower install`
+- (from project root) `cd demo && bower install`
 
 # example usage
 https://github.com/EvaLok/php-assetify/blob/master/demo/index.php
 
+# tests
+- (from project)`vendor/bin/phpspec run`
+
 # TODO
-- @todo: tests
+- @todo: more tests
 - @todo: garbage collection
  
