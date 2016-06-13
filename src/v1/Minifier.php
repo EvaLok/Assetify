@@ -22,6 +22,7 @@ class Minifier {
 		, $type
 		, $filter
 		, $minify
+	   , $defer
 	;
 
 	/**
@@ -53,6 +54,8 @@ class Minifier {
 			default:
 				throw new Exception("unknown type [$type]");
 		}
+
+		$this->defer = ! empty($params['defer']) ? true : false;
 
 		return $this;
 	}
