@@ -76,6 +76,30 @@ class Collection {
 		)->output();
 	}
 
+	public function getGroupAssetDeferred(
+		$group,
+		$asset,
+		$assetWebPath,
+		$type = null,
+		$minify = true
+	){
+		if( ! isset($this->filters[$type]) ){
+			throw new Exception("no filter set for type [$type]");
+		}
+
+		return (
+			new Minifier([
+				'asset' => $asset,
+				'asset_web_path' => $assetWebPath,
+				'files' => self::getGroup($group),
+				'type' => $type ?: $group,
+				'filter' => self::getFilter($type),
+				'minify' => $minify,
+				'defer' => true
+			])
+		)->output();
+	}
+
 	static public function getInstance()
 	{
 		return static::$instance = (

@@ -5,6 +5,7 @@ namespace Assetify\v1;
 use
 	SplFileInfo,
 
+	Assetify\v1\Minifier\DeferScript,
 	Assetify\v1\Minifier\Exception,
 
 	Assetic\Factory\AssetFactory,
@@ -22,6 +23,7 @@ class Minifier {
 		, $type
 		, $filter
 		, $minify
+	   , $defer
 	;
 
 	/**
@@ -54,16 +56,35 @@ class Minifier {
 				throw new Exception("unknown type [$type]");
 		}
 
+		$this->defer = ! empty($params['defer']) ? true : false;
+
 		return $this;
 	}
 
 	public function output()
 	{
-		if( ! $this->minify ){
-			return $this->getVerbose();
+		if( $this->defer ){
+			if( ! $this->minify ){
+				$output = new DeferScript($this->files);
+			} else {
+				$output = new DeferScript([
+					[
+						'web' => (
+							$this->assetWebPath
+							. $this->getMinifiedAsset()->getTargetPath()
+						)
+					]
+				]);
+			}
+		} else {
+			if( ! $this->minify ){
+				$output = $this->getVerbose();
+			} else {
+				$output = $this->getMinified();
+			}
 		}
 
-		return $this->getMinified();
+		return $output;
 	}
 
 	public function getVerbose()
@@ -92,10 +113,8 @@ class Minifier {
 		return $r;
 	}
 
-	public function getMinified()
+	private function getMinifiedAsset()
 	{
-		$r = '';
-
 		if( ! (new SplFileInfo($this->asset->getPath()))->isWritable() ){
 			throw new Exception(
 				"path " . $this->asset->getPath() . " is not writable"
@@ -127,7 +146,7 @@ class Minifier {
 		// only write the asset file if it does not already exist..
 		if( ! file_exists(
 			$this->asset->getPath() . DIRECTORY_SEPARATOR
-				. $asset->getTargetPath()
+			. $asset->getTargetPath()
 		)){
 			$writer = new AssetWriter($this->asset->getPath());
 			$writer->writeAsset($asset);
@@ -136,6 +155,15 @@ class Minifier {
 			// possible alternative, modify CacheBustingWorker to have option
 			// to append a timestamp instead of a hash
 		}
+
+		return $asset;
+	}
+
+	public function getMinified()
+	{
+		$r = '';
+
+		$asset = $this->getMinifiedAsset();
 
 		switch( $this->type ){
 			case 'js':
