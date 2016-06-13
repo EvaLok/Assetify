@@ -5,6 +5,7 @@ namespace Assetify\v1;
 use
 	SplFileInfo,
 
+	Assetify\v1\Minifier\DeferScript,
 	Assetify\v1\Minifier\Exception,
 
 	Assetic\Factory\AssetFactory,
@@ -62,11 +63,21 @@ class Minifier {
 
 	public function output()
 	{
-		if( ! $this->minify ){
-			return $this->getVerbose();
+		if( $this->defer ){
+			if( ! $this->minify ){
+				$output = new DeferScript($this->files);
+			} else {
+				// @todo	
+			}
+		} else {
+			if( ! $this->minify ){
+				$output = $this->getVerbose();
+			} else {
+				$output = $this->getMinified();
+			}
 		}
 
-		return $this->getMinified();
+		return $output;
 	}
 
 	public function getVerbose()

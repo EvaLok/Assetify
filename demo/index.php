@@ -16,10 +16,12 @@ $ac = Collection::getInstance();
 
 // set filter
 $ac->addFilter('css', new UglifyCssFilter(
-	'/usr/local/bin/uglifycss'
+	'/usr/local/bin/uglifycss',
+	'/usr/local/bin/node'
 ));
 $ac->addFilter('js', new UglifyJs2Filter(
-	'/usr/local/bin/uglifyjs'
+	'/usr/local/bin/uglifyjs',
+	'/usr/local/bin/node'
 ));
 
 $assets = [
@@ -35,6 +37,15 @@ $assets = [
 
 foreach( $assets as $asset ){
 	$ac->addAsset($asset, __DIR__ . '/' . $asset);
+}
+
+$deferredJs = [
+	'js/deferred1.js',
+	'js/deferred2.js',
+];
+
+foreach( $deferredJs as $js ){
+	$ac->addAsset($js, __DIR__ . '/' . $js, 'deferred-js');
 }
 
 ?>
@@ -65,6 +76,23 @@ foreach( $assets as $asset ){
 				// add false param for verbose (non-minified, non-consolidated)
 //				, false
 			);
+
+			echo $ac->getGroupAssetDeferred(
+				'deferred-js',
+				__DIR__ . '/assets/deferred-minified-js',
+				'/assets/',
+				'js',
+				false
+			);
+
+//			echo $ac->getGroupAssetDeferred(
+//				'js',
+//				__DIR__ . '/assets/deferred-not-minified-js',
+//				'/assets/',
+//				'js',
+//				false
+//			);
+
 		?>
 	</head>
 	<body>
