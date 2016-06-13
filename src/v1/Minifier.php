@@ -67,7 +67,14 @@ class Minifier {
 			if( ! $this->minify ){
 				$output = new DeferScript($this->files);
 			} else {
-				// @todo	
+				$output = new DeferScript([
+					[
+						'web' => (
+							$this->assetWebPath
+							. $this->getMinifiedAsset()->getTargetPath()
+						)
+					]
+				]);
 			}
 		} else {
 			if( ! $this->minify ){
@@ -106,10 +113,8 @@ class Minifier {
 		return $r;
 	}
 
-	public function getMinified()
+	private function getMinifiedAsset()
 	{
-		$r = '';
-
 		if( ! (new SplFileInfo($this->asset->getPath()))->isWritable() ){
 			throw new Exception(
 				"path " . $this->asset->getPath() . " is not writable"
@@ -141,7 +146,7 @@ class Minifier {
 		// only write the asset file if it does not already exist..
 		if( ! file_exists(
 			$this->asset->getPath() . DIRECTORY_SEPARATOR
-				. $asset->getTargetPath()
+			. $asset->getTargetPath()
 		)){
 			$writer = new AssetWriter($this->asset->getPath());
 			$writer->writeAsset($asset);
@@ -150,6 +155,15 @@ class Minifier {
 			// possible alternative, modify CacheBustingWorker to have option
 			// to append a timestamp instead of a hash
 		}
+
+		return $asset;
+	}
+
+	public function getMinified()
+	{
+		$r = '';
+
+		$asset = $this->getMinifiedAsset();
 
 		switch( $this->type ){
 			case 'js':

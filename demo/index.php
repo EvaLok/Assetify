@@ -48,6 +48,15 @@ foreach( $deferredJs as $js ){
 	$ac->addAsset($js, __DIR__ . '/' . $js, 'deferred-js');
 }
 
+$notDeferredJs = [
+	'js/deferred3.js',
+	'js/deferred4.js',
+];
+
+foreach( $notDeferredJs as $js ){
+	$ac->addAsset($js, __DIR__ . '/' . $js, 'not-minified-deferred-js');
+}
+
 ?>
 
 <html>
@@ -57,15 +66,17 @@ foreach( $deferredJs as $js ){
 		</title>
 
 		<?php
+			echo PHP_EOL . PHP_EOL;
+
 			// output css asset
 			echo $ac->getGroupAsset(
 				'css',
 				__DIR__ . '/assets/minified-css',
 				'/assets/',
 				'css'
-				// add false param for verbose (non-minified, non-consolidated)
-//				, false
 			);
+
+			echo PHP_EOL;
 
 			// output js asset
 			echo $ac->getGroupAsset(
@@ -73,26 +84,28 @@ foreach( $deferredJs as $js ){
 				__DIR__ . '/assets/minified-js',
 				'/assets/',
 				'js'
-				// add false param for verbose (non-minified, non-consolidated)
-//				, false
 			);
+
+			echo PHP_EOL;
 
 			echo $ac->getGroupAssetDeferred(
 				'deferred-js',
 				__DIR__ . '/assets/deferred-minified-js',
 				'/assets/',
+				'js'
+			);
+
+			echo PHP_EOL;
+
+			echo $ac->getGroupAssetDeferred(
+				'not-minified-deferred-js',
+				__DIR__ . '/assets/deferred-not-minified-js',
+				'/assets/',
 				'js',
 				false
 			);
 
-//			echo $ac->getGroupAssetDeferred(
-//				'js',
-//				__DIR__ . '/assets/deferred-not-minified-js',
-//				'/assets/',
-//				'js',
-//				false
-//			);
-
+			echo PHP_EOL . PHP_EOL;
 		?>
 	</head>
 	<body>
