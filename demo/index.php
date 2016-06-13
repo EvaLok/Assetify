@@ -111,7 +111,7 @@ foreach( $notDeferredJs as $js ){
 	<body>
 		<div>
 			<span>
-				this is a test
+				this is a test; feel free to check out the console or the source!
 			</span>
 		</div>
 	</body>
